@@ -14,6 +14,7 @@ param (
 # Sets all VMs matching tags.environment "lab" and configures start schedule as per lab schedule file
 #***************
 $schedules = $null
+Write-Host "Starting"
 Write-Verbose $ScheduleJsonFilePath
 Write-Verbose $ScheduleJsonFileUrl
 if ($ScheduleJsonFilePath -ne $null -and $ScheduleJsonFilePath -ne "") {
