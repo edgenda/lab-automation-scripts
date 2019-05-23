@@ -10,6 +10,7 @@ param (
     [Parameter(Mandatory = $False)]
     [string]$AutomationAccountResourceGroupName = "BNCLabAutomation"
 )
+Set-AzContext -Subscription $Subscription
 #***************
 # Sets all VMs matching tags.environment "lab" and configures start schedule as per lab schedule file
 #***************
