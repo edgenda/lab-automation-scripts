@@ -47,7 +47,13 @@ foreach ($labName in $labNames) {
     foreach ($onDate in $labSchedule.onDates | Where-Object { [datetime]::ParseExact($_, 'yyyy-MM-dd', $null) -gt [datetime]::Now } ) {
         Write-Host "for date $onDate"
         $date = [datetime]::ParseExact($onDate, 'yyyy-MM-dd', $null)
-        $timeZone = [TimeZoneInfo]::FindSystemTimeZoneById("Eastern Standard Time")
+        $timeZone = $null
+        try {
+            $timeZone = [TimeZoneInfo]::FindSystemTimeZoneById("Eastern Standard Time")
+        }
+        catch {
+            $timeZone = [TimeZoneInfo]::FindSystemTimeZoneById("America/Toronto")
+        }
         $startTime = [TimeZoneInfo]::ConvertTimeFromUtc($date.ToUniversalTime(), $timeZone).AddHours(8)
         $endTime = [TimeZoneInfo]::ConvertTimeFromUtc($date.ToUniversalTime(), $timeZone).AddDays(1).AddHours(3)
         $scheduleName = $labVm.Name + "$onDate" 
