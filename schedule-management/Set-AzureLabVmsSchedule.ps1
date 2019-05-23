@@ -18,19 +18,23 @@ Write-Host "Starting"
 Write-Verbose $ScheduleJsonFilePath
 Write-Verbose $ScheduleJsonFileUrl
 if ($ScheduleJsonFilePath -ne $null -and $ScheduleJsonFilePath -ne "") {
+    Write-Host "Loading file"
     $schedules = Get-Content $ScheduleJsonFilePath | Out-String | ConvertFrom-Json
 }
 elseif ($ScheduleJsonFileUrl -ne $null -and $ScheduleJsonFileUrl -ne "") {
+    Write-Host "Loading URL"
     $getObject = Invoke-RestMethod -Uri $ScheduleJsonFileUrl -Method Get
     $stringObject = $getObject | ConvertTo-Json
     Write-Verbose $stringObject
     $schedules = $getObject
 }
 if ($null -eq $schedules) {
+    Write-Host "No Schedule :("
     throw "Schedule not loaded"
 }
 $labNames = Get-AzResourceGroup | Where-Object { $_.tags.environment -eq "lab" } | Select-Object $_
 foreach ($labName in $labNames) {
+    Write-Host "Running labs"
     Write-Host "Finding VMs for lab named" $labName.Tags.lab
     Write-Host "From resource group" $labName.ResourceGroupName
     $labVms = Get-AzVM | Where-Object { $_.tags.environment -eq "lab" -and $_.tags.lab -eq $labName.Tags.lab }
