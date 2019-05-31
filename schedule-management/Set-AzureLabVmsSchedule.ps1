@@ -55,8 +55,10 @@ foreach ($labName in $labNames) {
             $timeZone = [TimeZoneInfo]::FindSystemTimeZoneById("America/Toronto")
         }
         $startTime = [TimeZoneInfo]::ConvertTimeFromUtc($date.ToUniversalTime(), $timeZone).AddHours(8)
+        Write-Host $startTime
         $endTime = [TimeZoneInfo]::ConvertTimeFromUtc($date.ToUniversalTime(), $timeZone).AddDays(1).AddHours(3)
-        $scheduleName = $labVm.Name + "$onDate" 
+        Write-Host $endTime
+        $scheduleName = $labName.ResourceGroupName + "$onDate" 
         $runbookName = "start_vms_runbook_" + $labName.ResourceGroupName
         $schedule = New-AzAutomationSchedule -Name $scheduleName -DayInterval 1 -TimeZone $timeZone.Id -StartTime $startTime -ExpiryTime $endTime -ResourceGroupName $AutomationAccountResourceGroupName -AutomationAccountName $AutomationAccountName
         try {
